@@ -7,6 +7,8 @@ def main():
         line = line.strip()
         if '——' in line:
             line = line.replace('—', '')
+        if '––' in line:
+            line = line.replace('–', '')
         out.append(line)
     out = [o for o in out if len(o) > 1]
     print('\n'.join(out))
