@@ -5,7 +5,7 @@ from collections import defaultdict
 
 PRECOMPUTE_BIGRAMS = True
 GET_TOP_BIGRAM_PMI = True
-IGNORE_BIGRAM_THRESHOLD = 5
+IGNORE_BIGRAM_THRESHOLD = 100
 
 def load_word_counts(path_to_file):
     d = defaultdict(int)
@@ -65,8 +65,13 @@ def main(corpus_path):
             pmis.append((p, bigram))
         pmis.sort(reverse=True)
         print('---\nBigrams with highest PMIs:')
-        num_per_line = 3
-        print('\n'.join(''.join(map(lambda x: '{:>30} ({:.3f})'.format(x[1], x[0]), pmis[i:i+num_per_line])) for i in range(0, 50, num_per_line)))
+        num_per_line = 4
+        num_lines = 25
+        print('\n'.join(''.join(map(lambda x: '{:>30} ({:.3f})'.format(x[1], x[0]), pmis[i:num_lines*num_per_line:num_lines])) for i in range(0, num_lines)))
+        '''i = 0
+        while pmis[i][0] > 10:
+            print(pmis[i])
+            i += 1'''
     print('Input bigrams to get PMI of, with 2 space-separated words per line:')
     for line in sys.stdin:
         a, b = line.lower().split()
