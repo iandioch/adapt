@@ -51,6 +51,18 @@ def main(corpus_path):
     print('---\nMost common bigrams:')
     print([(n, bigramcounts[n]) for n in topm[:20]])
     total_words = sum(wordcounts.values())
+
+    if GET_TOP_BIGRAM_PMI:
+        pmis = []
+        for bigram in bigramcounts:
+            a, b = bigram.split()
+            a_freq, b_freq = wordcounts[a], wordcounts[b]
+            p = pmi((a, a_freq), (b, b_freq), (bigram, bigramcounts[bigram]), wordcounts, total_words, print_result=False)
+            pmis.append((p, bigram))
+        pmis.sort(reverse=True)
+        print('---\nBigrams with highest PMIs:')
+        print(pmis[:20])
+    print('Input bigrams to get PMI of, with 2 space-separated words per line:')
     for line in sys.stdin:
         a, b = line.lower().split()
         bigram = a + ' ' + b
