@@ -10,6 +10,9 @@ def load_word_counts(path_to_file):
             words = line.lower().split()
             for word in words:
                 d[word] += 1
+            for i in range(len(words)-1):
+                a = words[i] + ' ' + words[i+1]
+                d[a] += 1
     return d
 
 def count_bigram_in_corpus(corpus_path, bigram):
@@ -38,7 +41,8 @@ def main(corpus_path):
         bigram = a + ' ' + b
         a_freq = wordcounts[a]
         b_freq = wordcounts[b]
-        bigram_freq = count_bigram_in_corpus(corpus_path, bigram)
+        #bigram_freq = count_bigram_in_corpus(corpus_path, bigram)
+        bigram_freq = wordcounts[bigram]
         print('{}\t: {}'.format(bigram, bigram_freq))
         p = pmi((a, a_freq), (b, b_freq), (bigram, bigram_freq), wordcounts, total_words)
         print(p)
