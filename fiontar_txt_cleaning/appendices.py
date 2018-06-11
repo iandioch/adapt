@@ -1,4 +1,5 @@
 import csv
+import itertools
 import re
 import sys
 
@@ -35,7 +36,11 @@ def write_output(ga, en):
     writer = csv.writer(sys.stdout)
     writer.writerow(['ga', 'en'])
     for pair in zip(ga, en):
-        writer.writerow(pair)
+        a = pair[0].split('\n')
+        b = pair[1].split('\n')
+        for line in itertools.zip_longest(a, b, fillvalue=''):
+            writer.writerow(line)
+        #writer.writerow(pair)
 
 if __name__ == '__main__':
     ga_file = sys.argv[1]
