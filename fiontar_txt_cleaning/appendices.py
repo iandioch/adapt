@@ -1,13 +1,26 @@
 import csv
+import re
 import sys
 
+URU_MAPPING = {
+    'a´': 'á',
+    'e´': 'é',
+    'i´': 'í',
+    'ı´': 'í',
+    'o´': 'ó',
+    'u´': 'ú'
+}
 
 def split_file(path, sep):
+    order_marker_regex = re.compile('O[.]\s[0-9]+[,]\sr[.]\s[0-9]+\s')
     if sep[-1] != ' ':
         sep += ' '
     with open(path, 'r') as f:
-        parts = f.read().split(sep)
-        return [sep + part for part in parts if len(part) > 1]
+        s = f.read()
+        for uru in URU_MAPPING:
+            s = s.replace(uru, URU_MAPPING[uru]).replace(uru.upper(), URU_MAPPING[uru].upper())
+        parts = s.split(sep)
+        return [sep + order_marker_regex.sub('', part) for part in parts if len(part) > 1]
 
 def split_ga_file(path):
     return split_file(path, 'FOSCRÍBHINN')
