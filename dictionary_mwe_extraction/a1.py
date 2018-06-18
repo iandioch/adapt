@@ -31,6 +31,12 @@ def get_data_from_pos(e):
         for tr in ex.findall('.//{urn:NEIDTRANS}TR'):
             b['ga'].append(tr.text)
         d['ex'].append(b)
+    for ch in e.findall('.//{urn:NEIDTRANS}ChunkCnt'):
+        en = ch.find('{urn:NEIDTRANS}CHUNK')
+        b = {'en': en.text, 'ga': []}
+        for tr in ch.findall('.//{urn:NEIDTRANS}TR'):
+            b['ga'].append(tr.text)
+        d['ex'].append(b)
     return d
 
 def get_collocations_from_entry(entry):
