@@ -12,19 +12,45 @@ NAMESPACES = {
     'md': 'urn:DPS2-metadata'
 }
 
-def get_collocations_from_entry(entry):
-    #print(ET.dump(entry))
-    hwd_obj = entry.find('.//{urn:NEIDTRANS}HWD')
-    hwd = None
-    a = {'hwd': None, 'ex': []}
-    if hwd_obj is not None:
-        a['hwd'] = hwd_obj.text.strip()
-    for ex in entry.findall('.//{urn:NEIDTRANS}ExCnt'):
+def get_data_from_pos(e):
+    print(ET.dump(e))
+    d = {'ex': [], 'ga': []}
+    #d['pos'] = e.find('.//{urn:NEIDTRANS}POS').attrib['code']
+    for ga in e.findall('.//{urn:NEIDTRANS}TrCnt/{urn:NEIDTRANS}TrGp/{urn:NEIDTRANS}TR'):
+        d['ga'].append(ga.text)
+    for ex in e.findall('.//{urn:NEIDTRANS}ExCnt'):
         en = ex.find('{urn:NEIDTRANS}EX')
         b = {'en': en.text, 'ga': []}
         for tr in ex.findall('.//{urn:NEIDTRANS}TR'):
             b['ga'].append(tr.text)
-        a['ex'].append(b)
+        d['ex'].append(b)
+    return d
+
+def get_collocations_from_entry(entry):
+    #print(ET.dump(entry))
+    hwd_obj = entry.find('.//{urn:NEIDTRANS}HWD')
+    hwd = None
+    a = {'hwd': None, 'pos': []}
+    if hwd_obj is not None:
+        a['hwd'] = hwd_obj.text.strip()
+    for pos in entry.findall('.//{urn:NEIDTRANS}DetBlk'):
+        d = get_data_from_pos(pos)
+        continue
+
+        p = {'pos': pos.attrib['code'], 'ex': [], 'ga': []}
+        for ga in pos.findall('./{urn:NEIDTRANS}TR'):
+            p['ga'].append(ga.text)
+        for ex in entry.findall('.//{urn:NEIDTRANS}ExCnt'):
+            en = ex.find('{urn:NEIDTRANS}EX')
+            b = {'en': en.text, 'ga': []}
+            for tr in ex.findall('.//{urn:NEIDTRANS}TR'):
+                b['ga'].append(tr.text)
+            p['ex'].append(b)
+        a['pos'].append(p)
+    for pos in entry.findall('.//{urn:NEIDTRANS}NounBlk'):
+        d = get_data_from_pos(pos)
+        a['pos'].append(d)
+        continue
 
 
     return [a]
