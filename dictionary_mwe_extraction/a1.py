@@ -39,30 +39,14 @@ def get_collocations_from_entry(entry):
     a = {'hwd': None, 'entries': []}
     if hwd_obj is not None:
         a['hwd'] = hwd_obj.text.strip()
-    for pos in entry.findall('.//{urn:NEIDTRANS}DetBlk/{urn:NEIDTRANS}FwkSenCnt'):
-        d = get_data_from_pos(pos)
-        a['entries'].append(d)
-    for pos in entry.findall('.//{urn:NEIDTRANS}NounBlk/{urn:NEIDTRANS}FwkSenCnt'):
-        d = get_data_from_pos(pos)
-        a['entries'].append(d)
-    for pos in entry.findall('.//{urn:NEIDTRANS}AdjBlk/{urn:NEIDTRANS}FwkSenCnt'):
-        d = get_data_from_pos(pos)
-        a['entries'].append(d)
-    for pos in entry.findall('.//{urn:NEIDTRANS}AdvBlk/{urn:NEIDTRANS}FwkSenCnt'):
-        d = get_data_from_pos(pos)
-        a['entries'].append(d)
-    for pos in entry.findall('.//{urn:NEIDTRANS}VerbBlk/{urn:NEIDTRANS}FwkSenCnt'):
-        d = get_data_from_pos(pos)
-        a['entries'].append(d)
-    for pos in entry.findall('.//{urn:NEIDTRANS}InterjBlk/{urn:NEIDTRANS}FwkSenCnt'):
-        d = get_data_from_pos(pos)
-        a['entries'].append(d)
-    for pos in entry.findall('.//{urn:NEIDTRANS}ConjBlk/{urn:NEIDTRANS}FwkSenCnt'):
-        d = get_data_from_pos(pos)
-        a['entries'].append(d)
-    for pos in entry.findall('.//{urn:NEIDTRANS}PrepBlk/{urn:NEIDTRANS}FwkSenCnt'):
-        d = get_data_from_pos(pos)
-        a['entries'].append(d)
+
+    blks = ['Adj', 'Adv', 'Conj', 'Det', 'Interj', 'Noun', 'Num', 'V_mod',
+            'V_aux', 'Prep', 'Pron', 'Pref', 'Suff', 'Verb']
+    for blk in blks:
+        q = './/{urn:NEIDTRANS}' + blk + 'Blk/{urn:NEIDTRANS}FwkSenCnt'
+        for pos in entry.findall(q):
+            d = get_data_from_pos(pos)
+            a['entries'].append(d)
     for pos in entry.findall('.//{urn:NEIDTRANS}PhrBlk/{urn:NEIDTRANS}PhrCnt/{urn:NEIDTRANS}FwkSenCnt'):
         d = get_data_from_pos(pos)
         a['entries'].append(d)
