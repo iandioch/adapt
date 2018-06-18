@@ -75,12 +75,11 @@ def main(xml_path):
     entries = []
     n = 0
     for entry in e.findall('{urn:NEIDTRANS}Entry'):
-        entries.append(get_collocations_from_entry(entry))
+        entries.extend(get_collocations_from_entry(entry))
         n += 1
         if n > 10000:
             break
-    print('entries:')
-    print('\n'.join(json.dumps(e) for e in entries))
+    print(json.dumps(entries, indent=4))
 
 if __name__ == '__main__':
     path = ' '.join(sys.argv[1:])
