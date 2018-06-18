@@ -13,11 +13,11 @@ NAMESPACES = {
 }
 
 def get_data_from_pos(e):
-    print(ET.dump(e))
     d = {'ex': [], 'ga': []}
-    #d['pos'] = e.find('.//{urn:NEIDTRANS}POS').attrib['code']
-    for ga in e.findall('.//{urn:NEIDTRANS}TrCnt/{urn:NEIDTRANS}TrGp/{urn:NEIDTRANS}TR'):
-        d['ga'].append(ga.text)
+    d['pos'] = e.find('.//{urn:NEIDTRANS}POS').attrib['code']
+    for ga in e.findall('./{urn:NEIDTRANS}TrCnt/{urn:NEIDTRANS}TrGp'):
+        g = ga.find('{urn:NEIDTRANS}TR').text
+        d['ga'].append(g)
     for ex in e.findall('.//{urn:NEIDTRANS}ExCnt'):
         en = ex.find('{urn:NEIDTRANS}EX')
         b = {'en': en.text, 'ga': []}
@@ -30,28 +30,24 @@ def get_collocations_from_entry(entry):
     #print(ET.dump(entry))
     hwd_obj = entry.find('.//{urn:NEIDTRANS}HWD')
     hwd = None
-    a = {'hwd': None, 'pos': []}
+    a = {'hwd': None, 'entries': []}
     if hwd_obj is not None:
         a['hwd'] = hwd_obj.text.strip()
-    for pos in entry.findall('.//{urn:NEIDTRANS}DetBlk'):
+    for pos in entry.findall('.//{urn:NEIDTRANS}DetBlk/{urn:NEIDTRANS}FwkSenCnt'):
         d = get_data_from_pos(pos)
-        continue
-
-        p = {'pos': pos.attrib['code'], 'ex': [], 'ga': []}
-        for ga in pos.findall('./{urn:NEIDTRANS}TR'):
-            p['ga'].append(ga.text)
-        for ex in entry.findall('.//{urn:NEIDTRANS}ExCnt'):
-            en = ex.find('{urn:NEIDTRANS}EX')
-            b = {'en': en.text, 'ga': []}
-            for tr in ex.findall('.//{urn:NEIDTRANS}TR'):
-                b['ga'].append(tr.text)
-            p['ex'].append(b)
-        a['pos'].append(p)
-    for pos in entry.findall('.//{urn:NEIDTRANS}NounBlk'):
+        a['entries'].append(d)
+    for pos in entry.findall('.//{urn:NEIDTRANS}NounBlk/{urn:NEIDTRANS}FwkSenCnt'):
         d = get_data_from_pos(pos)
-        a['pos'].append(d)
-        continue
-
+        a['entries'].append(d)
+    for pos in entry.findall('.//{urn:NEIDTRANS}AdjBlk/{urn:NEIDTRANS}FwkSenCnt'):
+        d = get_data_from_pos(pos)
+        a['entries'].append(d)
+    for pos in entry.findall('.//{urn:NEIDTRANS}VerbBlk/{urn:NEIDTRANS}FwkSenCnt'):
+        d = get_data_from_pos(pos)
+        a['entries'].append(d)
+    for pos in entry.findall('.//{urn:NEIDTRANS}InterjBlk/{urn:NEIDTRANS}FwkSenCnt'):
+        d = get_data_from_pos(pos)
+        a['entries'].append(d)
 
     return [a]
 
