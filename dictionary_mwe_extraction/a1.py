@@ -14,7 +14,11 @@ NAMESPACES = {
 
 def get_data_from_pos(e):
     d = {'ex': [], 'ga': []}
-    d['pos'] = e.find('.//{urn:NEIDTRANS}POS').attrib['code']
+    pos = e.find('.//{urn:NEIDTRANS}POS')
+    if pos is None:
+        d['pos'] = None
+    else:
+        d['pos'] = pos.attrib['code']
     for ga in e.findall('./{urn:NEIDTRANS}TrCnt/{urn:NEIDTRANS}TrGp'):
         g = ga.find('{urn:NEIDTRANS}TR').text
         d['ga'].append(g)
@@ -46,6 +50,9 @@ def get_collocations_from_entry(entry):
         d = get_data_from_pos(pos)
         a['entries'].append(d)
     for pos in entry.findall('.//{urn:NEIDTRANS}InterjBlk/{urn:NEIDTRANS}FwkSenCnt'):
+        d = get_data_from_pos(pos)
+        a['entries'].append(d)
+    for pos in entry.findall('.//{urn:NEIDTRANS}PhrBlk/{urn:NEIDTRANS}PhrCnt/{urn:NEIDTRANS}FwkSenCnt'):
         d = get_data_from_pos(pos)
         a['entries'].append(d)
 
