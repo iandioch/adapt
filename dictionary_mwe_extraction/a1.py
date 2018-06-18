@@ -64,7 +64,10 @@ def get_collocations_from_entry(entry):
         # Eg. "abduct" entry.
         for pos in sub.findall('{urn:NEIDTRANS}FwkSenCnt'):
             d = get_data_from_pos(pos)
-            form = pos.find('{urn:NEIDTRANS}SUBFORM').text
+            form_obj = pos.find('.//{urn:NEIDTRANS}SUBFORM')
+            form = None
+            if form_obj is not None:
+                form = form_obj.text
             d['subform'] = form
             a['entries'].append(d)
     for sen in entry.findall('./{urn:NEIDTRANS}DEnt/{urn:NEIDTRANS}FwkSenCnt'):
@@ -84,7 +87,7 @@ def main(xml_path):
     for entry in e.findall('{urn:NEIDTRANS}Entry'):
         entries.append(get_collocations_from_entry(entry))
         n += 1
-        if n > 1000:
+        if n > 10000:
             break
     print('entries:')
     print('\n'.join(json.dumps(e) for e in entries))
