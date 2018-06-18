@@ -22,6 +22,9 @@ def get_data_from_pos(e):
     for ga in e.findall('./{urn:NEIDTRANS}TrCnt/{urn:NEIDTRANS}TrGp'):
         g = ga.find('{urn:NEIDTRANS}TR').text
         d['ga'].append(g)
+    for ga in e.findall('./{urn:NEIDTRANS}FwkStrCnt/{urn:NEIDTRANS}TrCnt/{urn:NEIDTRANS}TrGp'):
+        g = ga.find('{urn:NEIDTRANS}TR').text
+        d['ga'].append(g)
     for ex in e.findall('.//{urn:NEIDTRANS}ExCnt'):
         en = ex.find('{urn:NEIDTRANS}EX')
         b = {'en': en.text, 'ga': []}
