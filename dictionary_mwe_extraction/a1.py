@@ -34,7 +34,6 @@ def get_data_from_pos(e):
     return d
 
 def get_collocations_from_entry(entry):
-    #print(ET.dump(entry))
     hwd_obj = entry.find('.//{urn:NEIDTRANS}HWD')
     hwd = None
     a = {'hwd': None, 'entries': []}
@@ -58,6 +57,12 @@ def get_collocations_from_entry(entry):
     for pos in entry.findall('.//{urn:NEIDTRANS}PhrBlk/{urn:NEIDTRANS}PhrCnt/{urn:NEIDTRANS}FwkSenCnt'):
         d = get_data_from_pos(pos)
         a['entries'].append(d)
+    for sub in entry.findall('.//{urn:NEIDTRANS}SUBBlk/{urn:NEIDTRANS}SubFormCnt'):
+        for pos in sub.findall('{urn:NEIDTRANS}FwkSenCnt'):
+            d = get_data_from_pos(pos)
+            form = pos.find('{urn:NEIDTRANS}SUBFORM').text
+            d['subform'] = form
+            a['entries'].append(d)
 
     return [a]
 
