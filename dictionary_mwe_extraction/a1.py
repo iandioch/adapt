@@ -16,9 +16,16 @@ def get_collocations_from_entry(entry):
     #print(ET.dump(entry))
     hwd_obj = entry.find('.//{urn:NEIDTRANS}HWD')
     hwd = None
-    a = {'hwd': None}
+    a = {'hwd': None, 'ex': []}
     if hwd_obj is not None:
         a['hwd'] = hwd_obj.text.strip()
+    for ex in entry.findall('.//{urn:NEIDTRANS}ExCnt'):
+        en = ex.find('{urn:NEIDTRANS}EX')
+        b = {'en': en.text, 'ga': []}
+        for tr in ex.findall('.//{urn:NEIDTRANS}TR'):
+            b['ga'].append(tr.text)
+        a['ex'].append(b)
+
 
     return [a]
 
