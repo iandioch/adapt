@@ -58,11 +58,16 @@ def get_collocations_from_entry(entry):
         d = get_data_from_pos(pos)
         a['entries'].append(d)
     for sub in entry.findall('.//{urn:NEIDTRANS}SUBBlk/{urn:NEIDTRANS}SubFormCnt'):
+        # Eg. "abduct" entry.
         for pos in sub.findall('{urn:NEIDTRANS}FwkSenCnt'):
             d = get_data_from_pos(pos)
             form = pos.find('{urn:NEIDTRANS}SUBFORM').text
             d['subform'] = form
             a['entries'].append(d)
+    for sen in entry.findall('./{urn:NEIDTRANS}DEnt/{urn:NEIDTRANS}FwkSenCnt'):
+        # Eg. "accommodation office" entry.
+        d = get_data_from_pos(sen)
+        a['entries'].append(d)
 
     return [a]
 
