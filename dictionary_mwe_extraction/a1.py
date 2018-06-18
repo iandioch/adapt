@@ -64,7 +64,26 @@ def get_collocations_from_entry(entry):
         # Eg. "accommodation office" entry.
         d = get_data_from_pos(sen)
         a['entries'].append(d)
-
+    for phr in entry.findall('.//{urn:NEIDTRANS}FwkMWEBlk/{urn:NEIDTRANS}PhrVBlk/{urn:NEIDTRANS}PhrVCnt'):
+        # Eg. "abound with".
+        form_obj = entry.find('.//{urn:NEIDTRANS}PHRV')
+        form = None
+        if form_obj is not None:
+            form = form_obj.text
+        for tr in phr.findall('{urn:NEIDTRANS}FwkSenCnt'):
+            d = get_data_from_pos(tr)
+            d['subform'] = form
+            a['entries'].append(d)
+    for phr in entry.findall('.//{urn:NEIDTRANS}FwkMWEBlk/{urn:NEIDTRANS}PhrBlk/{urn:NEIDTRANS}PhrCnt'):
+        # Eg. "abound with".
+        form_obj = entry.find('.//{urn:NEIDTRANS}PHR')
+        form = None
+        if form_obj is not None:
+            form = form_obj.text
+        for tr in phr.findall('{urn:NEIDTRANS}FwkSenCnt'):
+            d = get_data_from_pos(tr)
+            d['subform'] = form
+            a['entries'].append(d)
     return [a]
 
 def main(xml_path):
