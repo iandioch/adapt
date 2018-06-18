@@ -72,7 +72,7 @@ def get_collocations_from_entry(entry):
         a['entries'].append(d)
     for phr in entry.findall('.//{urn:NEIDTRANS}FwkMWEBlk/{urn:NEIDTRANS}PhrVBlk/{urn:NEIDTRANS}PhrVCnt'):
         # Eg. "abound with".
-        form_obj = entry.find('.//{urn:NEIDTRANS}PHRV')
+        form_obj = phr.find('.//{urn:NEIDTRANS}PHRV')
         form = None
         if form_obj is not None:
             form = form_obj.text
@@ -82,7 +82,7 @@ def get_collocations_from_entry(entry):
             a['entries'].append(d)
     for phr in entry.findall('.//{urn:NEIDTRANS}FwkMWEBlk/{urn:NEIDTRANS}PhrBlk/{urn:NEIDTRANS}PhrCnt'):
         # Eg. "abound with".
-        form_obj = entry.find('.//{urn:NEIDTRANS}PHR')
+        form_obj = phr.find('.//{urn:NEIDTRANS}PHR')
         form = None
         if form_obj is not None:
             form = form_obj.text
@@ -98,9 +98,14 @@ def get_mwes_from_entries(entries):
             pos = f['pos']
             if pos is None:
                 pos = 'UNK'
+            en = e['hwd']
+            if 'subform' in f and f['subform'] is not None:
+                en = en + ' (' + f['subform'].strip() + ')'
+            if en is None:
+                en = 'UNK'
             for g in f['ga']:
                 if len(g.split()) > 1:
-                    yield (g, pos, e['hwd'])
+                    yield (g, pos, en)
     
 
 def main(xml_path):
