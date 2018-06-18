@@ -92,6 +92,17 @@ def get_collocations_from_entry(entry):
             a['entries'].append(d)
     return [a]
 
+def get_mwes_from_entries(entries):
+    for e in entries:
+        for f in e['entries']:
+            pos = f['pos']
+            if pos is None:
+                pos = 'UNK'
+            for g in f['ga']:
+                if len(g.split()) > 1:
+                    yield (g, pos, e['hwd'])
+    
+
 def main(xml_path):
     ET.register_namespace('', 'urn:NEDITRANS')
     ET.register_namespace('d', 'urn:NEIDTRANS')
@@ -105,6 +116,12 @@ def main(xml_path):
         if n > 10000:
             break
     print(json.dumps(entries, indent=4))
+
+    irish_mwes = get_mwes_from_entries(entries)
+    with open('mwes.ga', 'w') as f:
+        for mwe in sorted(set(irish_mwes)):
+            f.write('\t'.join(mwe))
+            f.write('\n')
 
 if __name__ == '__main__':
     path = ' '.join(sys.argv[1:])
