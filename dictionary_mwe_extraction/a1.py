@@ -60,6 +60,9 @@ def get_collocations_from_entry(entry):
     for pos in entry.findall('.//{urn:NEIDTRANS}ConjBlk/{urn:NEIDTRANS}FwkSenCnt'):
         d = get_data_from_pos(pos)
         a['entries'].append(d)
+    for pos in entry.findall('.//{urn:NEIDTRANS}PrepBlk/{urn:NEIDTRANS}FwkSenCnt'):
+        d = get_data_from_pos(pos)
+        a['entries'].append(d)
     for pos in entry.findall('.//{urn:NEIDTRANS}PhrBlk/{urn:NEIDTRANS}PhrCnt/{urn:NEIDTRANS}FwkSenCnt'):
         d = get_data_from_pos(pos)
         a['entries'].append(d)
