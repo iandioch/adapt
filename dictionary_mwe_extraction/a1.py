@@ -121,7 +121,7 @@ def main(xml_path):
     print(json.dumps(entries, indent=4))
 
     irish_mwes = get_mwes_from_entries(entries)
-    with open('mwes.ga', 'w') as f:
+    with open('mwes.txt', 'w') as f:
         for mwe in sorted(set(irish_mwes)):
             f.write('\t'.join(mwe))
             f.write('\n')
