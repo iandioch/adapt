@@ -104,6 +104,8 @@ def get_mwes_from_entries(entries):
             if en is None:
                 en = 'UNK'
             for g in f['ga']:
+                if g is None:
+                    continue
                 if len(g.split()) > 1:
                     yield (g, pos, en)
     
@@ -114,12 +116,8 @@ def main(xml_path):
     ET.register_namespace('md', 'urn:DPS2-metadata')
     e = ET.parse(xml_path).getroot()
     entries = []
-    n = 0
     for entry in e.findall('{urn:NEIDTRANS}Entry'):
         entries.extend(get_collocations_from_entry(entry))
-        n += 1
-        if n > 10000:
-            break
     print(json.dumps(entries, indent=4))
 
     irish_mwes = get_mwes_from_entries(entries)
