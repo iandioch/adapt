@@ -25,18 +25,23 @@ def find_question_answers(e):
 
             d[lang] = text
         if is_yes_no_answer(d['en']):
+            q_ends_with_question_mark = (prev_tu['en'][-1] == '?')
+            ans_is_at_start = (d['en'].lower().strip().startswith('yes') or
+                               d['en'].lower().strip().startswith('no'))
             yield {
                 'en_q': prev_tu['en'],
                 'en_a': d['en'],
                 'ga_q': prev_tu['ga'],
-                'ga_a': d['ga']
+                'ga_a': d['ga'],
+                'q_ends_with_?': q_ends_with_question_mark,
+                'ans_is_at_start': ans_is_at_start
             }
         prev_tu = d
 
 def parse_tmx(path):
     e = ET.parse(path).getroot()
     with open('yesno.csv', 'w') as csvfile:
-        fieldnames = ['en_q', 'en_a', 'ga_q', 'ga_a']
+        fieldnames = ['en_q', 'en_a', 'ga_q', 'ga_a', 'q_ends_with_?', 'ans_is_at_start']
         w = csv.DictWriter(csvfile, fieldnames = fieldnames)
         w.writeheader()
         for d in find_question_answers(e):
