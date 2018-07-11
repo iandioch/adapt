@@ -1,3 +1,4 @@
+import csv
 import re
 import sys
 
@@ -24,11 +25,22 @@ def find_question_answers(e):
 
             d[lang] = text
         if is_yes_no_answer(d['en']):
-            yield '\n'.join((prev_tu['en'], d['en'], '-', prev_tu['ga'], d['ga'], '---'))
+            yield {
+                'en_q': prev_tu['en'],
+                'en_a': d['en'],
+                'ga_q': prev_tu['ga'],
+                'ga_a': d['ga']
+            }
         prev_tu = d
 
 def parse_tmx(path):
     e = ET.parse(path).getroot()
+    with open('yesno.csv', 'w') as csvfile:
+        fieldnames = ['en_q', 'en_a', 'ga_q', 'ga_a']
+        w = csv.DictWriter(csvfile, fieldnames = fieldnames)
+        w.writeheader()
+        for d in find_question_answers(e):
+            w.writerow(d)
     print('\n'.join(str(e) for e in find_question_answers(e)))
 
 def main():
