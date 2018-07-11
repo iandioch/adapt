@@ -1,10 +1,15 @@
+import re
 import sys
 
 import xml.etree.ElementTree as ET
 
+YES_RE = re.compile('\\byes\\b')
+NO_RE = re.compile('\\bno\\b')
+NUMBER_RE = re.compile('no[.]*\s*[0-9]')
+
 def is_yes_no_answer(en):
     en = en.lower()
-    return 'yes' in en or 'no' in en
+    return YES_RE.search(en) or (NO_RE.search(en) and not NUMBER_RE.search(en))
 
 def find_question_answers(e):
     prev_tu = None
@@ -19,8 +24,8 @@ def find_question_answers(e):
 
             d[lang] = text
         if is_yes_no_answer(d['en']):
-            yield (d['en'] + ' ' + d['ga'])
-        prev_tu = tu
+            yield '\n'.join((prev_tu['en'], d['en'], '-', prev_tu['ga'], d['ga'], '---'))
+        prev_tu = d
 
 def parse_tmx(path):
     e = ET.parse(path).getroot()
