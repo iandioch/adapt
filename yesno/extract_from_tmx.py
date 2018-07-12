@@ -20,7 +20,7 @@ def find_question_answers(e):
             lang = tuv.attrib['{http://www.w3.org/XML/1998/namespace}lang']
             lang = lang.split('-')[0]
 
-            text = ''.join(tuv.itertext())
+            text = ''.join(tuv.find('seg').itertext())
             text = text.strip()
 
             d[lang] = text
