@@ -4,6 +4,8 @@ import sys
 '''
 Takes an infile and outfile to read from and write to, respectively.
 '''
+
+
 def convert(inf, outf):
     writer = csv.writer(outf, dialect=csv.excel_tab)
 
@@ -50,7 +52,9 @@ def convert(inf, outf):
             lemma = lemma.strip('"')
             if len(morphology) == 0:
                 morphology = '_'
-            writer.writerow((index+1, surface_form, lemma, coarse_pos, fine_pos, '|'.join(morphology)) + ('_',)*4)
+            writer.writerow((index+1, surface_form, lemma, coarse_pos,
+                             fine_pos, '|'.join(morphology)) + ('_',)*4)
+
 
 if __name__ == '__main__':
     convert(sys.stdin, sys.stdout)
