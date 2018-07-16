@@ -14,10 +14,11 @@ class Word:
         self.tails = []
 
     def __str__(self):
-        return str(vars(self)) 
+        return str(vars(self))
 
     def __repr__(self):
         return 'Word("{}", "{}", "{}")'.format(self.surface, self.lemma, self.coarse_pos)
+
 
 def parse_conll(conll_s):
     e = conll_s.split('\n')
@@ -39,20 +40,25 @@ def parse_conll(conll_s):
             wo.head_obj = out[head-1]
     return out
 
+
 '''
 Returns whether or not the question is based on the copula.
 Eg.
 "An broc é sin?" -> True
 "An bhfaca tú é sin?" -> False
 '''
+
+
 def is_copula_question(conll):
     # TODO
     return False
+
 
 def analyse_verbal_question(conll):
     for w in conll:
         print(str(w))
     pass
+
 
 def analyse(conll_s):
     conll = parse_conll(conll_s)
