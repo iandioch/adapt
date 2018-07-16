@@ -55,9 +55,17 @@ def is_copula_question(conll):
 
 
 def analyse_verbal_question(conll):
+    question_verb = None
     for w in conll:
-        print(str(w))
-    pass
+        if w.dep == 'top' and w.coarse_pos == 'Verb':
+            question_verb = w
+            break
+    if question_verb is None:
+        print('No question verb found:')
+        for w in conll:
+            print(str(w))
+    else:
+        print('verb = {}, tense = {}'.format(question_verb.lemma, question_verb.morphology))
 
 
 def analyse(conll_s):
