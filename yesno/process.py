@@ -34,7 +34,8 @@ def irishfst_output_to_conll(sents):
 
 def parse_dependencies(sents):
     command = ['java', '-jar', MALTPARSER_JAR_PATH,
-               '-c', MALTPARSER_CONFIG_NAME, '-m', 'parse']
+               '-c', MALTPARSER_CONFIG_NAME, '-m', 'parse',
+               '-v', 'off']
     proc = subprocess.Popen(command, stdin=subprocess.PIPE,
                             stdout=subprocess.PIPE, encoding='utf-8', cwd=MALTPARSER_CONFIG_PATH)
     output, error = proc.communicate(input=sents)
