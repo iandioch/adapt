@@ -1,5 +1,5 @@
 '''
-Expects as input one one line the Gaeilge question.
+Input one line at a time, each being a question in Irish.
 '''
 
 import io
