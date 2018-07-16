@@ -39,7 +39,14 @@ def convert(inf, outf):
 
     for sent in sents:
         for index, word in enumerate(sent):
-            surface_form, lemma, coarse_pos, fine_pos, *morphology = word
+            print(word)
+            surface_form, lemma, *details = word
+            coarse_pos, *details = details
+            if len(details):
+                fine_pos, *morphology = details
+            else:
+                fine_pos = '_'
+                morphology = []
             surface_form = surface_form.strip('"<>')
             lemma = lemma.strip('"')
             if len(morphology) == 0:
