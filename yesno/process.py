@@ -19,8 +19,10 @@ def run_irishfst(line):
 
 def irishfst_output_to_conll(sents):
     inf = io.StringIO(sents)
-    outf = sys.stdout
-    pos2conll.convert(inf, outf)
+    with io.StringIO() as outf:
+        pos2conll.convert(inf, outf)
+        outf.seek(0)
+        return outf.read()
 
 def process(line):
     # tokenise line
@@ -29,6 +31,7 @@ def process(line):
     # extract useful parts
     pos_tagged = run_irishfst(line)
     conll = irishfst_output_to_conll(pos_tagged)
+    print(conll)
 
 def main():
     for line in sys.stdin:
