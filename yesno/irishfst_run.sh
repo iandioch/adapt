@@ -7,7 +7,5 @@
 # elaine oct 2012,  Noah (iandioch11@gmail.com) June 2018
 
 IRISHFST=~/work/irishfst
-cat - | tr -sc "[0-9a-zA-ZáéíóúÁÉÍÓÚ.?,]" "[\n*]" | flookup -a $IRISHFST/bin/lexguess.fst | perl $IRISHFST/dis/lookup2cg3.prl | vislcg3 -g $IRISHFST/dis/gael-dis.rle > irishfst.out
+cat /dev/stdin | tr -sc "[0-9a-zA-ZáéíóúÁÉÍÓÚ.?,]" "[\n*]" | flookup -a $IRISHFST/bin/lexguess.fst | perl $IRISHFST/dis/lookup2cg3.prl | vislcg3 -g $IRISHFST/dis/gael-dis.rle
 echo "done"
-
-
