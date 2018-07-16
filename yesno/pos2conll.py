@@ -44,7 +44,7 @@ def convert(inf, outf):
             lemma = lemma.strip('"')
             if len(morphology) == 0:
                 morphology = '_'
-            writer.writerow((index, surface_form, lemma, coarse_pos, fine_pos, '|'.join(morphology)) + ('_',)*4)
+            writer.writerow((index+1, surface_form, lemma, coarse_pos, fine_pos, '|'.join(morphology)) + ('_',)*4)
 
 if __name__ == '__main__':
     convert(sys.stdin, sys.stdout)
