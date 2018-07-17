@@ -78,7 +78,7 @@ def analyse_verbal_question(conll):
     if question_verb is None:
         print('No question verb found.')
         for w in conll:
-            print(w.surface, '(', w.coarse_pos, w.fine_pos, '-', w.head_obj.surface if w.head_obj is not None else "None", ')', end=' ')
+            print(w.surface, '(', w.coarse_pos, '|', w.fine_pos, '-', w.head_obj.surface if w.head_obj is not None else "None", ')', end=' ')
         print()
     else:
         lemma = question_verb.lemma
