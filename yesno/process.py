@@ -6,6 +6,7 @@ import io
 import subprocess
 import sys
 
+import analyse
 import pos2conll
 
 # Path to script to tokenise and run POS tagger.
@@ -15,6 +16,7 @@ OUTPUT_IRISHFST_ERRORS = False
 MALTPARSER_JAR_PATH = '/home/noah/work/misc_tools/maltparser/maltparser-1.9.1/maltparser-1.9.1.jar'
 MALTPARSER_CONFIG_PATH = '/home/noah/work/misc_tools/maltparser/maltparser-1.9.1/'
 MALTPARSER_CONFIG_NAME = 'IrishTreebankYesNo'
+OUTPUT_MALTPARSER_ERRORS = False
 
 
 
@@ -45,9 +47,10 @@ def parse_dependencies(sents):
     proc = subprocess.Popen(command, stdin=subprocess.PIPE,
                             stdout=subprocess.PIPE, encoding='utf-8', cwd=MALTPARSER_CONFIG_PATH)
     output, error = proc.communicate(input=sents)
-    print(output)
-    print('error:')
-    print(error)
+    if error is not None and OUTPUT_MALTPARSER_ERRORS:
+        print('maltparser error:')
+        print(error)
+    return output
 
 
 def process(line):
@@ -58,6 +61,7 @@ def process(line):
     pos_tagged = run_irishfst(line)
     conll = irishfst_output_to_conll(pos_tagged)
     deps = parse_dependencies(conll)
+    analyse.analyse(deps)
 
 
 def main():
