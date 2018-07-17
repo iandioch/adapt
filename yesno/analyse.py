@@ -54,6 +54,19 @@ def is_copula_question(conll):
     return False
 
 
+def get_verb_info(morphology):
+    # Tense / Aspect / Mood / Autonomous
+    INFOS = {
+        'PastInd',
+        'PresInd',
+        'FutInd',
+        'Auto'
+    }
+    morphs = morphology.split('|')
+    for t in INFOS :
+        if t in morphs:
+            yield t
+
 def analyse_verbal_question(conll):
     question_verb = None
     for w in conll:
@@ -64,10 +77,13 @@ def analyse_verbal_question(conll):
     print()
     if question_verb is None:
         print('No question verb found.')
+        for w in conll:
+            print(w.surface, '(', w.coarse_pos, w.fine_pos, '-', w.head_obj.surface if w.head_obj is not None else "None", ')', end=' ')
+        print()
     else:
         lemma = question_verb.lemma
-        tense = question_verb.morphology.split('|')[0]
-        print(lemma, tense)
+        tams = [t for t in get_verb_info(question_verb.morphology)]
+        print(lemma, tams)
     print('-'*20)
 
 
