@@ -51,7 +51,9 @@ Eg.
 
 def is_copula_question(conll):
     # TODO
-    return False
+    for w in conll:
+        if w.dep == 'top':
+            return not w.coarse_pos == 'Verb'
 
 
 def get_verb_info(morphology):
