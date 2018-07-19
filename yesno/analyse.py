@@ -1,5 +1,6 @@
 QUESTIONS = ['an', 'ar', 'nach', 'nár']
 
+
 class Word:
     def __init__(self, index, surface, lemma, coarse_pos, fine_pos, morphology, head, dep, *other):
         self.index = int(index)
@@ -67,9 +68,10 @@ def get_verb_info(morphology):
         'Auto'
     }
     morphs = morphology.split('|')
-    for t in INFOS :
+    for t in INFOS:
         if t in morphs:
             yield t
+
 
 def analyse_verbal_question(conll):
     question_verb = None
@@ -82,13 +84,15 @@ def analyse_verbal_question(conll):
     if question_verb is None:
         print('No question verb found.')
         for w in conll:
-            print(w.surface, '(', w.coarse_pos, '|', w.fine_pos, '-', w.head_obj.surface if w.head_obj is not None else "None", ')', end=' ')
+            print(w.surface, '(', w.coarse_pos, '|', w.fine_pos, '-',
+                  w.head_obj.surface if w.head_obj is not None else "None", ')', end=' ')
         print()
     else:
         lemma = question_verb.lemma
         tams = [t for t in get_verb_info(question_verb.morphology)]
         print(lemma, tams)
     print('-'*20)
+
 
 def analyse_copula_question(conll):
     def find_cop(head):
@@ -103,7 +107,7 @@ def analyse_copula_question(conll):
                 print('Adding', x.surface, 'to queue')
                 q.append(x)
         return None
-    
+
     head = None
     for w in conll:
         if w.dep == 'top':

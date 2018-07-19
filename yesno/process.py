@@ -19,7 +19,6 @@ MALTPARSER_CONFIG_NAME = 'IrishTreebankYesNo'
 OUTPUT_MALTPARSER_ERRORS = False
 
 
-
 def run_irishfst(line):
     command = ['sh', PATH_TO_IRISHFST_SCRIPT]
     proc = subprocess.Popen(command, stdin=subprocess.PIPE,
