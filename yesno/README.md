@@ -11,4 +11,10 @@ The following tools must be set up before this module can be used:
 - [Elaine Uí Dhonnchadha's part of speech tagger for Irish](https://github.com/uidhonne).
 - [Maltparser](http://www.maltparser.org/), and trained with [the Irish treebank](https://github.com/tlynn747/IrishDependencyTreebank/blob/master/1020-gold_master_IrishTreebank.conll).
 
-The paths to these tools must then be set, within the Python code.
+## Config
+
+You must set the paths to the above resources in the variables at the top of the `process.py` file.
+
+# Usage
+
+Run `python3 process.py`. The program will wait for questions to be fed by `stdin`, and will output its report to `stdout`.
