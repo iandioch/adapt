@@ -104,7 +104,6 @@ def analyse_copula_question(conll):
             if w.coarse_pos == 'Cop' or w.surface.lower() in QUESTIONS:
                 return w
             for x in w.tails:
-                print('Adding', x.surface, 'to queue')
                 q.append(x)
         return None
 
