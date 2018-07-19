@@ -1,3 +1,5 @@
+QUESTIONS = ['an', 'ar', 'nach', 'nár']
+
 class Word:
     def __init__(self, index, surface, lemma, coarse_pos, fine_pos, morphology, head, dep, *other):
         self.index = int(index)
@@ -95,9 +97,10 @@ def analyse_copula_question(conll):
         q = [head]
         while len(q):
             w = q.pop(0)
-            if w.coarse_pos == 'Cop':
+            if w.coarse_pos == 'Cop' or w.surface.lower() in QUESTIONS:
                 return w
             for x in w.tails:
+                print('Adding', x.surface, 'to queue')
                 q.append(x)
         return None
     
