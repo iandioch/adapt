@@ -88,11 +88,43 @@ def analyse_verbal_question(conll):
         print(lemma, tams)
     print('-'*20)
 
+def analyse_copula_question(conll):
+    def find_cop(head):
+        if head is None:
+            return None
+        q = [head]
+        while len(q):
+            w = q.pop(0)
+            if w.coarse_pos == 'Cop':
+                return w
+            for x in w.tails:
+                q.append(x)
+        return None
+    
+    head = None
+    for w in conll:
+        if w.dep == 'top':
+            head = w
+            break
+    cop = find_cop(head)
+    if cop is None:
+        print('Could not find question particle.')
+        return
+    print('Particle =', str(cop))
+    predicate = cop.head_obj
+    if predicate is None:
+        print('Could not find predicate.')
+        return
+    print('Predicate =', str(predicate))
+
 
 def analyse(conll_s):
     conll = parse_conll(conll_s)
     if is_copula_question(conll):
-        # TODO
-        pass
+        for w in conll:
+            print(w.surface, end=' ')
+        print()
+        print('IS COPULA QUESTION')
+        analyse_copula_question(conll)
     else:
         analyse_verbal_question(conll)
