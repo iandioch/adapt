@@ -1,5 +1,4 @@
-QUESTIONS = ['an', 'ar', 'nach', 'nár']
-
+QUESTIONS = ['an', 'ar', 'nach', 'nár'] 
 
 class Word:
     def __init__(self, index, surface, lemma, coarse_pos, fine_pos, morphology, head, dep, *other):
@@ -56,6 +55,7 @@ def is_copula_question(conll):
     # TODO
     for w in conll:
         if w.dep == 'top':
+            print('top =', str(w))
             return not w.coarse_pos == 'Verb'
 
 
@@ -74,9 +74,11 @@ def get_verb_info(morphology):
 
 
 def analyse_verbal_question(conll):
-    question_verb = None
     for w in conll:
         print(w.surface, end=' ')
+    print()
+    question_verb = None
+    for w in conll:
         if w.dep == 'top' and w.coarse_pos == 'Verb':
             question_verb = w
             break
@@ -126,6 +128,7 @@ def analyse_copula_question(conll):
     print('Predicate lemma =', predicate.lemma)
     print(str(cop))
     print(str(predicate))
+    print('-'*20)
 
 
 def analyse(conll_s):
