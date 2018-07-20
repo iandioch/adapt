@@ -2,7 +2,10 @@
 Input one line at a time, each being a question in Irish.
 '''
 
+import atexit
+import fcntl
 import io
+import os
 import subprocess
 import sys
 
@@ -18,13 +21,35 @@ MALTPARSER_CONFIG_PATH = '/home/noah/work/misc_tools/maltparser/maltparser-1.9.1
 MALTPARSER_CONFIG_NAME = 'IrishTreebankYesNo'
 OUTPUT_MALTPARSER_ERRORS = False
 
+IRISHFST_PROC = None
+
 
 def run_irishfst(line):
-    command = ['sh', PATH_TO_IRISHFST_SCRIPT]
-    proc = subprocess.Popen(command, stdin=subprocess.PIPE,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, encoding='utf-8')
-    output, error = proc.communicate(input=line)
+    global IRISHFST_PROC
+    if IRISHFST_PROC is None:
+        print('Starting irishfst')
+        command = ['sh', PATH_TO_IRISHFST_SCRIPT]
+        IRISHFST_PROC = subprocess.Popen(command, bufsize=1, stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, encoding='utf-8', shell=True)
+        #fcntl.fcntl(IRISHFST_PROC.stdout.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
+
+    IRISHFST_PROC.stdin.write(line + '\n')
+    print('WROTE:', line)
+    IRISHFST_PROC.stdin.flush()
+    output = []
+    print('bop')
+    print(dir(IRISHFST_PROC.stdout))
+    s = IRISHFST_PROC.stdout.readline()
+    print('got')
+    while True:
+        if len(s):
+            output.append(s)
+            print("OUTPUT:", output)
+        s = IRISHFST_PROC.stdout.readline()
+    output = '\n'.join(output)
+    error = None
+    #output, error = IRISHFST_PROC.communicate(input=line)
     if error is not None and OUTPUT_IRISHFST_ERRORS:
         print('irishfst error:')
         print(error)
@@ -67,6 +92,13 @@ def main():
     for line in sys.stdin:
         process(line)
 
+def close_procs():
+    print('CLOSE_PROCS')
+    IRISHFST_PROC.stdin.close()
+    IRISHFST_PROC.wait()
+    print('Return code =', IRISHFST_PROC.returncode)
+    pass
 
 if __name__ == '__main__':
+    atexit.register(close_procs)
     main()
