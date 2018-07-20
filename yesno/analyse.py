@@ -116,12 +116,16 @@ def analyse_copula_question(conll):
     if cop is None:
         print('Could not find question particle.')
         return
-    print('Particle =', str(cop))
+    print('Particle surface =', cop.surface)
+    print('Particle lemma =', cop.lemma)
     predicate = cop.head_obj
     if predicate is None:
         print('Could not find predicate.')
         return
-    print('Predicate =', str(predicate))
+    print('Predicate surface =', predicate.surface)
+    print('Predicate lemma =', predicate.lemma)
+    print(str(cop))
+    print(str(predicate))
 
 
 def analyse(conll_s):
