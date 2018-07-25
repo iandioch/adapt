@@ -1,3 +1,5 @@
+import json
+
 QUESTIONS = ['an', 'ar', 'nach', 'nár'] 
 
 class Word:
@@ -74,6 +76,10 @@ def get_verb_info(morphology):
 
 
 def analyse_verbal_question(conll):
+    ans = {
+        'type': 'verb',
+        'error': None 
+    }
     for w in conll:
         print(w.surface, end=' ')
     print()
@@ -84,17 +90,22 @@ def analyse_verbal_question(conll):
             break
     print()
     if question_verb is None:
+        ans['error'] = 'No question verb found.'
         print('No question verb found.')
         for w in conll:
             print(w.surface, '(', w.coarse_pos, '|', w.fine_pos, '-',
                   w.head_obj.surface if w.head_obj is not None else "None", ')', end=' ')
-        print()
     else:
         lemma = question_verb.lemma
         tams = [t for t in get_verb_info(question_verb.morphology)]
         print(lemma, tams)
+        ans['verb'] = {
+            'lemma': question_verb.lemma,
+            'surface': question_verb.surface,
+            'tams': tams
+        }
     print('-'*20)
-
+    return ans
 
 def analyse_copula_question(conll):
     def find_cop(head):
@@ -130,14 +141,29 @@ def analyse_copula_question(conll):
     print(str(predicate))
     print('-'*20)
 
+    ans = {
+        'type': 'copula',
+        'error': None,
+        'copula': {
+            'surface': cop.surface,
+            'lemma': cop.lemma
+        },
+        'predicate': {
+            'surface': predicate.surface,
+            'lemma': predicate.lemma
+        }
+    }
+    return ans
 
 def analyse(conll_s):
     conll = parse_conll(conll_s)
+    ans = {}
     if is_copula_question(conll):
         for w in conll:
             print(w.surface, end=' ')
         print()
         print('IS COPULA QUESTION')
-        analyse_copula_question(conll)
+        ans = analyse_copula_question(conll)
     else:
-        analyse_verbal_question(conll)
+        ans = analyse_verbal_question(conll)
+    print(json.dumps(ans, indent=4, ensure_ascii=False))
