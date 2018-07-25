@@ -108,6 +108,10 @@ def analyse_verbal_question(conll):
     return ans
 
 def analyse_copula_question(conll):
+    ans = {
+        'type': 'copula',
+        'error': None
+    }
     def find_cop(head):
         if head is None:
             return None
@@ -127,31 +131,27 @@ def analyse_copula_question(conll):
             break
     cop = find_cop(head)
     if cop is None:
-        print('Could not find question particle.')
-        return
+        ans['error'] = 'Could not find copula form.'
+        return ans
     print('Copula surface =', cop.surface)
     print('Copula lemma =', cop.lemma)
     predicate = cop.head_obj
     if predicate is None:
-        print('Could not find predicate.')
-        return
+        ans['error'] = 'Could not find predicate.'
+        return ans
     print('Predicate surface =', predicate.surface)
     print('Predicate lemma =', predicate.lemma)
     print(str(cop))
     print(str(predicate))
     print('-'*20)
 
-    ans = {
-        'type': 'copula',
-        'error': None,
-        'copula': {
-            'surface': cop.surface,
-            'lemma': cop.lemma
-        },
-        'predicate': {
-            'surface': predicate.surface,
-            'lemma': predicate.lemma
-        }
+    ans['copula'] = {
+        'surface': cop.surface,
+        'lemma': cop.lemma
+    }
+    ans['predicate'] = {
+        'surface': predicate.surface,
+        'lemma': predicate.lemma
     }
     return ans
 
