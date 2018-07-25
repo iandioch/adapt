@@ -57,7 +57,6 @@ def is_copula_question(conll):
     # TODO
     for w in conll:
         if w.dep == 'top':
-            print('top =', str(w))
             return not w.coarse_pos == 'Verb'
 
 
@@ -80,31 +79,22 @@ def analyse_verbal_question(conll):
         'type': 'verb',
         'error': None 
     }
-    for w in conll:
-        print(w.surface, end=' ')
-    print()
     question_verb = None
     for w in conll:
         if w.dep == 'top' and w.coarse_pos == 'Verb':
             question_verb = w
             break
-    print()
     if question_verb is None:
         ans['error'] = 'No question verb found.'
-        print('No question verb found.')
-        for w in conll:
-            print(w.surface, '(', w.coarse_pos, '|', w.fine_pos, '-',
-                  w.head_obj.surface if w.head_obj is not None else "None", ')', end=' ')
+        return ans
     else:
         lemma = question_verb.lemma
         tams = [t for t in get_verb_info(question_verb.morphology)]
-        print(lemma, tams)
         ans['verb'] = {
             'lemma': question_verb.lemma,
             'surface': question_verb.surface,
             'tams': tams
         }
-    print('-'*20)
     return ans
 
 def analyse_copula_question(conll):
@@ -133,17 +123,10 @@ def analyse_copula_question(conll):
     if cop is None:
         ans['error'] = 'Could not find copula form.'
         return ans
-    print('Copula surface =', cop.surface)
-    print('Copula lemma =', cop.lemma)
     predicate = cop.head_obj
     if predicate is None:
         ans['error'] = 'Could not find predicate.'
         return ans
-    print('Predicate surface =', predicate.surface)
-    print('Predicate lemma =', predicate.lemma)
-    print(str(cop))
-    print(str(predicate))
-    print('-'*20)
 
     ans['copula'] = {
         'surface': cop.surface,
@@ -159,11 +142,9 @@ def analyse(conll_s):
     conll = parse_conll(conll_s)
     ans = {}
     if is_copula_question(conll):
-        for w in conll:
-            print(w.surface, end=' ')
-        print()
-        print('IS COPULA QUESTION')
         ans = analyse_copula_question(conll)
     else:
         ans = analyse_verbal_question(conll)
+    ans['question'] = ' '.join(w.surface for w in conll)
     print(json.dumps(ans, indent=4, ensure_ascii=False))
+    print('-'*20)
