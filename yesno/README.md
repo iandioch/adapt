@@ -41,4 +41,4 @@ If any error occurred during the processing of the question, the `error` field w
 - `copula`
 - `verb`
 
-Depending on what kind of question it was, the rest of the JSON document will contain different data describing the structure of it.
+Depending on what kind of question it was, the rest of the JSON document will contain different data describing the structure of it. The best way to understand the structure is to run the command `cat test_questions.txt | python3 process.py` and inspect the results.
