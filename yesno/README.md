@@ -18,3 +18,27 @@ You must set the paths to the above resources in the variables at the top of the
 # Usage
 
 Run `python3 process.py`. The program will wait for questions to be fed by `stdin`, and will output its report to `stdout`.
+
+## Input
+
+Enter one question in Irish per line over stdin.
+
+As an example of inputs, see the file `test_questions.txt` in this directory.
+
+## Output
+
+The program will output one JSON document after each input line, with a report of the structure of the question. All results will have the following fields:
+
+```js
+{
+    "type": "TYPE",
+    "error": null
+}
+```
+
+If any error occurred during the processing of the question, the `error` field will not be null, but will contain a string describing the error. `TYPE` will be one of the following:
+
+- `copula`
+- `verb`
+
+Depending on what kind of question it was, the rest of the JSON document will contain different data describing the structure of it.
