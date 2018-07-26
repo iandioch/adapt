@@ -147,4 +147,3 @@ def analyse(conll_s):
         ans = analyse_verbal_question(conll)
     ans['question'] = ' '.join(w.surface for w in conll)
     print(json.dumps(ans, indent=4, ensure_ascii=False))
-    print('-'*20)
