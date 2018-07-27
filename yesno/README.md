@@ -42,3 +42,20 @@ If any error occurred during the processing of the question, the `error` field w
 - `verb`
 
 Depending on what kind of question it was, the rest of the JSON document will contain different data describing the structure of it. The best way to understand the structure is to run the command `cat test_questions.txt | python3 process.py` and inspect the results.
+
+An example of an output for a verbal question:
+
+```js
+{
+    "type": "verb",
+    "error": null,
+    "verb": {
+        "lemma": "buail",
+        "surface": "mbuailfidh",
+        "tams": [
+            "FutInd"
+        ]
+    },
+    "question": "Nach mbuailfidh Eilís an bithiúnach ?"
+}
+```
