@@ -2,6 +2,8 @@
 
 Irish has no words for "yes" or "no". When asked `Are you X?`, you would reply `(I) am` or `(I) am not`. In this directory is a tool that, when given a question, creates a report as to the verb form that should be used when responding.
 
+Read [the blog post I wrote about this module](http://mycode.doesnot.run/2018/08/15/yes-no/) for an introduction to the problem and a summary of what this module does.
+
 # Setup
 
 ## Dependencies
